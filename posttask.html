@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Task</title>
+    <link rel="stylesheet" href="posttaskStyles.css"> <!-- Include your custom CSS file -->
+</head>
+<body>
+    <header>
+        <h1>Post a Task</h1>
+        <!-- Removed username display -->
+    </header>
+
+    <section>
+        <form id="taskForm">
+            <label for="taskTitle">Title of Task</label>
+            <br>
+            <input type="text" id="taskTitle" placeholder="Write a title for your task" required><br>
+            
+            <label for="taskDetail">Task Detail</label>
+            <textarea id="taskDetail" required></textarea>
+            
+            <label for="taskType">Type of Task:</label>
+            <select id="taskType" required>
+                <option value="">Select the type of task</option>
+                <option value="Cleaning">PhotoGraphy</option>
+                <option value="Tutoring">Tutoring</option>
+                
+                <option value="Tutoring">Events</option>
+                
+                <option value="Tutoring">homework and Assigment</option>
+                
+                <option value="Tutoring">Petcare</option>
+                <option value="Tutoring">Office Work</option>
+                <option value="Tutoring">Design</option>
+                <option value="Tutoring">lift-move-pack </option>
+                
+                <option value="Tutoring">Custom</option>
+                
+               
+            </select>
+            <br>
+            <br>
+            <label for="taskDeadline">Deadline of Task</label>
+            <input type="date" id="taskDeadline" required> <!-- Input field for deadline --> <br><br>
+
+            <!-- Toggle button for mode of task -->
+            <label>Mode of Task:</label>
+            <div>
+                <label><input type="radio" name="taskMode" value="In Person" required> In Person</label>
+                <label><input type="radio" name="taskMode" value="Remote" required> Remote</label>
+            </div>
+<br>
+            <!-- New input field for Budget -->
+            <label for="taskBudget">Your Budget to Pay:</label> 
+            
+            <input type="number" id="taskBudget" placeholder="Enter your budget" required> <!-- Input for budget -->
+
+            <br><br>
+            <button type="submit">Post Task</button>
+        </form>
+    </section>
+
+    <script>
+        // Get username from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+        
+        // Handle form submission
+        document.getElementById('taskForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const title = document.getElementById('taskTitle').value;
+            const detail = document.getElementById('taskDetail').value;
+            const deadline = document.getElementById('taskDeadline').value; // Get deadline value
+            const mode = document.querySelector('input[name="taskMode"]:checked').value;
+            const type = document.getElementById('taskType').value;
+            const budget = document.getElementById('taskBudget').value; // Get budget value
+
+            try {
+                const response = await fetch('/add-task', { // Use the correct endpoint
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title,
+                        detail,
+                        deadline, // Include deadline in the request body
+                        mode,
+                        type,
+                        budget // Include budget in the request body
+                    })
+                });
+
+                const data = await response.json();
+
+                // Redirect to reciverIndex.html after successful task posting
+                window.location.href = `reciverIndex.html?username=${username}`;
+            } catch (error) {
+                console.error('Error posting task:', error);
+                alert('Error posting task. Please try again.'); // Display error message
+            }
+        });
+    </script>
+</body>
+</html>

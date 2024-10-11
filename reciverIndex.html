@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Receiver - Post Task</title>
+    <link rel="stylesheet" href="reciverIndexStyles.css">
+</head>
+<body>
+    <div>
+        <h2>Askit</h2>
+        <button id="addTaskButton">Add a Task</button>
+        <button id="viewMessagesButton">View Messages</button>
+        <h4 align="center">Your Posted Tasks</h4>
+        <div id="tasksContainer"></div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username'); // Keep the username from URL
+       let userId;
+        document.addEventListener('DOMContentLoaded', function() {
+    // Fetch userId from the /receiverIndex/tasks API
+    fetch('/receiverIndex/tasks')
+        .then(response => response.json())
+        .then(data => {
+            if (data.userId) {
+                userId = data.userId;
+                console.log('Fetched userId:', userId);
+                // Further operations with userId can be done here
+            } else {
+                console.error('Failed to fetch userId.');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching userId:', error);
+        });
+});
+
+        // Redirect to post task page with username and userId
+        document.getElementById('addTaskButton').onclick = () => {
+            window.location.href = 'posttask.html?username=' + username + '&userId=' + userId;
+        };
+
+        // Redirect to view messages page with userId and username
+        document.getElementById('viewMessagesButton').onclick = () => {
+            window.location.href = `see-message.html?userId=${userId}&username=${username}`; // Ensure username and userId are passed
+        };
+
+        // Fetch tasks for the logged-in user (tasks that the current user posted)
+        async function fetchUserTasks() {
+            try {
+                const response = await fetch('http://localhost:3000/reciverIndex/tasks'); // Fetch tasks based on logged-in user ID from session
+                if (!response.ok) {
+                    throw new Error('Failed to fetch tasks');
+                }
+                const tasks = await response.json();
+                const tasksContainer = document.getElementById('tasksContainer');
+
+                if (tasks.length === 0) {
+                    tasksContainer.innerHTML = '<p>No tasks posted.</p>';
+                } else {
+                    tasksContainer.innerHTML = tasks.map(task => `
+                        <div class="task">
+                            <h3>${task.title}</h3>
+                            <p><strong>Detail:</strong> ${task.detail}</p>
+                            <p><strong>Deadline:</strong> ${task.deadline}</p>
+                            <p><strong>Type:</strong> ${task.type}</p>
+                            <p><strong>Mode:</strong> ${task.mode}</p>
+                            <p><strong>Budget:</strong> ${task.budget}</p>
+                            <button class="viewOffersButton" data-taskid="${task._id}">View Offers</button>
+                        </div>
+                    `).join('');
+
+                    // Add event listeners to "View Offers" buttons
+                    document.querySelectorAll('.viewOffersButton').forEach(button => {
+                        button.addEventListener('click', (event) => {
+                            const taskId = event.target.getAttribute('data-taskid');
+                            window.location.href = `viewoffers.html?taskId=${taskId}&userId=${userId}`; // Keep userId when redirecting to view offers
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        }
+
+        fetchUserTasks(); // Fetch the tasks when the page loads
+    </script>
+</body>
+</html>

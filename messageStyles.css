@@ -1,0 +1,99 @@
+/* Global styles */
+body {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 80%;
+    max-width: 500px;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 20px;
+    height: 63%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Title for the receiver */
+h2 {
+    text-align: left;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #d1d1d1;
+    padding-left: 5px;
+}
+
+/* Box for input fields */
+.input-box {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 5px;
+}
+
+/* Input fields */
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 0; /* Removed margin to keep consistent spacing */
+    background-color: transparent;
+    color: #e0e0e0;
+    border: none; /* Removed border for cleaner look */
+    outline: none; /* Remove outline */
+}
+
+/* Change textarea font family */
+textarea {
+    resize: none; /* Prevent resizing of textarea */
+    font-family: 'Courier New', monospace; /* Updated font family for textarea */
+}
+
+/* Placeholder styles */
+input[type="text"]::placeholder,
+textarea::placeholder {
+    color: #b3b3b3;
+}
+
+/* Submit button */
+button {
+    width: 100%;
+    padding: 12px; /* Increased padding for a better touch target */
+    background-color: #3a3a3a;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem; /* Increased font size for better readability */
+    font-weight: bold; /* Make the button text bold */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform for subtle effect */
+}
+
+button:hover {
+    background-color: #5a5a5a;
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+/* Responsive layout */
+@media screen and (min-width: 768px) {
+    .container {
+        width: 70%;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .container {
+        width: 50%;
+    }
+}
